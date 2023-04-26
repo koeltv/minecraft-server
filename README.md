@@ -28,8 +28,8 @@ From here, start your minecraft server and pass it commands if you want
 
 ## To-do
 
-- More details on server state (especially while loading)
-- Show console output
+- More details on server state (WIP)
+- Show console output (WIP)
 - Handle commands
 - Allow server configuration (server.properties)
 - Pass mods & config via local files
