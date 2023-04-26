@@ -1,0 +1,80 @@
+body {
+    background-color: #363e4a;
+    color: #fbfefd;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+li {
+    float: left;
+}
+
+li a, li b, li i {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+.inlined {
+    display: inline;
+}
+
+.animated-button {
+    width: 6.5em;
+    height: 2.3em;
+    margin: 0.5em;
+    background: black;
+    border: none;
+    border-radius: 0.625em;
+    font-size: 20px;
+    font-weight: bold;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.animated-button:not(.animated-button:disabled) {
+    color: white;
+    cursor: pointer;
+}
+
+.animated-button:hover:not(.animated-button:disabled) {
+    color: #3d6810;
+    transition: all 0.5s;
+}
+
+/*.animated-button:after {*/
+/*    content: "";*/
+/*    background: white;*/
+/*    position: absolute;*/
+/*    z-index: -1;*/
+/*    left: -20%;*/
+/*    right: -20%;*/
+/*    top: 0;*/
+/*    bottom: 0;*/
+/*    -webkit-transform: skewX(-45deg) scale(0, 1);*/
+/*    -ms-transform: skewX(-45deg) scale(0, 1);*/
+/*    transform: skewX(-45deg) scale(0, 1);*/
+/*    -webkit-transition: all 0.5s;*/
+/*    transition: all 0.5s;*/
+/*}*/
+
+/*.animated-button:hover:after {*/
+/*    -webkit-transform: skewX(-45deg) scale(1, 1);*/
+/*    -ms-transform: skewX(-45deg) scale(1, 1);*/
+/*    transform: skewX(-45deg) scale(1, 1);*/
+/*    -webkit-transition: all 0.5s;*/
+/*    transition: all 0.5s;*/
+/*}*/

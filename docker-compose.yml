@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  admin:
+    build: .
+    container_name: admin-interface
+    env_file:
+      - admin-interface.env
+    ports:
+      - "80:8080"
+      - "25565:25565"
