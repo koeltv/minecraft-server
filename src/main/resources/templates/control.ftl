@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width"/>
-    <link rel="icon" href="/files/favicon.ico"/>
+    <link rel="icon" href="/files/images/favicon.ico"/>
     <title>Minecraft Server - Controls</title>
-    <link rel="stylesheet" href="/files/minecraftStyle.css"/>
+    <link rel="stylesheet" href="/files/css/minecraftStyle.css"/>
 </head>
 <body style="text-align: center; font-family: sans-serif">
     <nav>

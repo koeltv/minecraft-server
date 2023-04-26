@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width"/>
-    <link rel="icon" href="/files/favicon.ico"/>
+    <link rel="icon" href="/files/images/favicon.ico"/>
     <title>Minecraft Server - Login</title>
-    <link rel="stylesheet" href="/files/normalizer.css"/>
-    <link rel="stylesheet" href="/files/loginStyles.css"/>
+    <link rel="stylesheet" href="/files/css/normalizer.css"/>
+    <link rel="stylesheet" href="/files/css/loginStyles.css"/>
 </head>
 <body>
     <form method="post">
-        <img src="/files/bannier.png" alt="logo">
+        <img src="/files/images/banner.png" alt="logo">
         <div class="title">Admin Connexion</div>
         <div class="input">
             <label>

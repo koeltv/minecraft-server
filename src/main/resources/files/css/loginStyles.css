@@ -1,16 +1,16 @@
 @font-face {
     font-family: 'Nunito';
-    src: url(/files/Nunito.ttf);
+    src: url(/files/font/Nunito.ttf);
 }
 
 @font-face {
     font-family: 'Montserrat';
-    src: url(/files/Montserrat.ttf);
+    src: url(/files/font/Montserrat.ttf);
 }
 
 @font-face {
     font-family: 'MinecraftEvenings';
-    src: url(/files/MinecraftEvenings.ttf);
+    src: url(/files/font/MinecraftEvenings.ttf);
 }
 
 * {
