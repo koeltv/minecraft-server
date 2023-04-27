@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width"/>
-    <link rel="icon" href="/files/images/favicon.ico"/>
+    <#include 'headers.ftl'>
     <title>Minecraft Server - Login</title>
-    <link rel="stylesheet" href="/files/css/normalizer.css"/>
     <link rel="stylesheet" href="/files/css/loginStyles.css"/>
 </head>
 <body>

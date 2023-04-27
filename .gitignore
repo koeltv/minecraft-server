@@ -36,4 +36,5 @@ out/
 .vscode/
 
 /server/*
+/logs/*
 *.env
