@@ -4,9 +4,9 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 /**
@@ -47,10 +47,6 @@ suspend fun ApplicationCall.respondSSE(events: Flow<ServerSendEvent>) {
  * We produce a [Flow] from a suspending function
  * that send a [ServerSendEvent] instance each second.
  */
-val eventFlow = flow {
-    var n = 0
-    while (true) {
-        emit(ServerSendEvent("demo${n++}"))
-        delay(1000)
-    }
+val eventFlow: MutableSharedFlow<ServerSendEvent> = MutableSharedFlow<ServerSendEvent>().also {
+    it.onEach { event -> println("Hey !") }
 }

@@ -1,12 +1,16 @@
 package com.koeltv.routing
 
 import com.koeltv.currentOs
+import com.koeltv.plugins.ServerSendEvent
+import com.koeltv.plugins.eventFlow
 import io.ktor.server.application.*
 import io.ktor.server.freemarker.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.ProcessBuilder.Redirect
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 
@@ -23,7 +27,15 @@ fun Route.configureMinecraftRoutes() {
         post("start") {
             if (serverProcess == null) {
                 application.log.info("Starting...")
-                serverProcess = startServer()
+                serverProcess = startServer().also { process ->
+                    launch(Dispatchers.IO) {
+                        process.inputStream.bufferedReader().use {
+                            it
+                                .lineSequence()
+                                .forEach { line -> eventFlow.emit(ServerSendEvent(line)) }
+                        }
+                    }
+                }
                 application.log.info("Server ready !")
             }
             call.respondRedirect("/minecraft")
@@ -40,6 +52,10 @@ fun Route.configureMinecraftRoutes() {
     }
 }
 
+/**
+ * Start the minecraft server
+ * @return the running server [Process]
+ */
 private suspend fun startServer(): Process {
     return withContext(Dispatchers.IO) {
         val currentDirectory = Paths.get("")
@@ -66,7 +82,7 @@ private suspend fun startServer(): Process {
                     }
                 }_args.txt"
             )
-            .inheritIO()
+            .redirectInput(Redirect.INHERIT)
             .start()
     }
 }

@@ -25,5 +25,11 @@
             <input type="submit" value="Stop" class="animated-button" <#if !serverOn>disabled</#if>>
         </form>
     </div>
+
+    <div>
+        <ul id="events">
+        </ul>
+        <script src="/files/sse.js"></script>
+    </div>
 </body>
 </html>
