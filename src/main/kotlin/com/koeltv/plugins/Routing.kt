@@ -1,6 +1,7 @@
 package com.koeltv.plugins
 
 import com.koeltv.routing.configureMinecraftRoutes
+import com.koeltv.routing.configureSSERoutes
 import com.koeltv.routing.configureSecurityRoutes
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -15,9 +16,9 @@ fun Application.configureRouting() {
 
         configureSecurityRoutes()
 
-        configureMinecraftRoutes()
-
-        authenticate("auth-form") {
+        authenticate("auth-session") {
+            configureSSERoutes()
+            configureMinecraftRoutes()
         }
     }
 }

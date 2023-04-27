@@ -2,7 +2,6 @@ package com.koeltv.routing
 
 import com.koeltv.currentOs
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.freemarker.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -16,29 +15,27 @@ private const val LIBRARIES_PATH = "server/libraries/net/minecraftforge/forge"
 var serverProcess: Process? = null
 
 fun Route.configureMinecraftRoutes() {
-    authenticate("auth-session") {
-        route("minecraft") {
-            get {
-                call.respond(FreeMarkerContent("control.ftl", mapOf("serverOn" to (serverProcess != null))))
-            }
+    route("minecraft") {
+        get {
+            call.respond(FreeMarkerContent("control.ftl", mapOf("serverOn" to (serverProcess != null))))
+        }
 
-            post("start") {
-                if (serverProcess == null) {
-                    application.log.info("Starting...")
-                    serverProcess = startServer()
-                    application.log.info("Server ready !")
-                }
-                call.respondRedirect("/minecraft")
+        post("start") {
+            if (serverProcess == null) {
+                application.log.info("Starting...")
+                serverProcess = startServer()
+                application.log.info("Server ready !")
             }
+            call.respondRedirect("/minecraft")
+        }
 
-            post("stop") {
-                serverProcess?.let {
-                    it.destroy()
-                    serverProcess = null
-                    application.log.info("Server stopped")
-                }
-                call.respondRedirect("/minecraft")
+        post("stop") {
+            serverProcess?.let {
+                it.destroy()
+                serverProcess = null
+                application.log.info("Server stopped")
             }
+            call.respondRedirect("/minecraft")
         }
     }
 }
