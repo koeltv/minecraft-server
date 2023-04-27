@@ -5,18 +5,21 @@ import com.koeltv.plugins.ServerSendEvent
 import com.koeltv.plugins.eventFlow
 import io.ktor.server.application.*
 import io.ktor.server.freemarker.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.ProcessBuilder.Redirect
 import java.nio.file.InvalidPathException
 import java.nio.file.Paths
 
 private const val LIBRARIES_PATH = "server/libraries/net/minecraftforge/forge"
 
 var serverProcess: Process? = null
+
+const val GUI = true
 
 fun Route.configureMinecraftRoutes() {
     route("minecraft") {
@@ -46,6 +49,19 @@ fun Route.configureMinecraftRoutes() {
                 it.destroy()
                 serverProcess = null
                 application.log.info("Server stopped")
+            }
+            call.respondRedirect("/minecraft")
+        }
+
+        post("command") {
+            serverProcess?.let { process ->
+                val command = call.receiveParameters().getOrFail("command")
+                launch(Dispatchers.IO) {
+                    process.outputStream.bufferedWriter().let {
+                        it.write("$command\n")
+                        it.flush()
+                    }
+                }
             }
             call.respondRedirect("/minecraft")
         }
@@ -80,9 +96,8 @@ private suspend fun startServer(): Process {
                     } else {
                         "unix"
                     }
-                }_args.txt"
+                }_args.txt ${if (GUI) "" else "--nogui"}"
             )
-            .redirectInput(Redirect.INHERIT)
             .start()
     }
 }

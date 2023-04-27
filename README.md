@@ -26,9 +26,9 @@ From here, start your minecraft server and pass it commands if you want
 - Login page
 - Start & Stop server with minimalist feedback
 - Show console output
+- Handle commands
 
 ## To-do
-- Handle commands
 - Allow server configuration (server.properties)
 - Pass mods & config via local files
 - Pass mods via online repository
