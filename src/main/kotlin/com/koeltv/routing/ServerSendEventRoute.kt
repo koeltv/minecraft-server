@@ -1,10 +1,12 @@
 package com.koeltv.routing
 
+import com.koeltv.plugins.ServerSendEvent
 import com.koeltv.plugins.eventFlow
 import com.koeltv.plugins.respondSSE
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.take
 
 fun Route.configureSSERoutes() {
@@ -16,7 +18,15 @@ fun Route.configureSSERoutes() {
          */
         get("/events") {
             try {
-                call.respondSSE(eventFlow)
+                call.respondSSE(
+                    eventFlow.onStart {
+                        logFile.useLines { lines ->
+                            lines.forEach {
+                                emit(ServerSendEvent(it))
+                            }
+                        }
+                    }
+                )
             } finally {
                 eventFlow.take(1)
             }

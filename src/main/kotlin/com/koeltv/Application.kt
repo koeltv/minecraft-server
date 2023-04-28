@@ -13,6 +13,7 @@ val currentOs by lazy {
 @Suppress("unused")
 fun Application.module() {
     configureSecurity()
+    configureStatusPages()
     configureTemplating()
     configureRouting()
 }

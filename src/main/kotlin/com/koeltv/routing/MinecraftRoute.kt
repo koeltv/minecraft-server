@@ -1,6 +1,6 @@
 package com.koeltv.routing
 
-import com.koeltv.currentOs
+import com.koeltv.model.MinecraftServer
 import com.koeltv.plugins.ServerSendEvent
 import com.koeltv.plugins.eventFlow
 import io.ktor.server.application.*
@@ -11,31 +11,32 @@ import io.ktor.server.routing.*
 import io.ktor.server.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.nio.file.InvalidPathException
-import java.nio.file.Paths
+import java.io.File
 
-private const val LIBRARIES_PATH = "server/libraries/net/minecraftforge/forge"
+val minecraftServer = MinecraftServer()
 
-var serverProcess: Process? = null
-
-const val GUI = true
+val logFile = File("./minecraft.log").also {
+    it.delete()
+    it.createNewFile()
+}
 
 fun Route.configureMinecraftRoutes() {
     route("minecraft") {
         get {
-            call.respond(FreeMarkerContent("control.ftl", mapOf("serverOn" to (serverProcess != null))))
+            call.respond(FreeMarkerContent("control.ftl", mapOf("serverOn" to minecraftServer.isOn())))
         }
 
         post("start") {
-            if (serverProcess == null) {
+            if (minecraftServer.isOff()) {
                 application.log.info("Starting...")
-                serverProcess = startServer().also { process ->
+                minecraftServer.start { stream ->
                     launch(Dispatchers.IO) {
-                        process.inputStream.bufferedReader().use {
-                            it
-                                .lineSequence()
-                                .forEach { line -> eventFlow.emit(ServerSendEvent(line)) }
+                        stream.bufferedReader().use {
+                            it.lineSequence()
+                                .forEach { line ->
+                                    logFile.appendText("$line\n")
+                                    eventFlow.emit(ServerSendEvent(line))
+                                }
                         }
                     }
                 }
@@ -45,59 +46,19 @@ fun Route.configureMinecraftRoutes() {
         }
 
         post("stop") {
-            serverProcess?.let {
-                it.destroy()
-                serverProcess = null
+            launch(Dispatchers.IO) {
+                minecraftServer.stop()
                 application.log.info("Server stopped")
             }
             call.respondRedirect("/minecraft")
         }
 
         post("command") {
-            serverProcess?.let { process ->
+            if (minecraftServer.isOn()) {
                 val command = call.receiveParameters().getOrFail("command")
-                launch(Dispatchers.IO) {
-                    process.outputStream.bufferedWriter().let {
-                        it.write("$command\n")
-                        it.flush()
-                    }
-                }
+                minecraftServer.inputCommand(command)
             }
             call.respondRedirect("/minecraft")
         }
-    }
-}
-
-/**
- * Start the minecraft server
- * @return the running server [Process]
- */
-private suspend fun startServer(): Process {
-    return withContext(Dispatchers.IO) {
-        val currentDirectory = Paths.get("")
-
-        val forgeVersion = currentDirectory
-            .resolve(LIBRARIES_PATH)
-            .toFile()
-            .list()
-            ?.firstOrNull()
-            ?: throw InvalidPathException("$this/$LIBRARIES_PATH", "Incorrect server files structure")
-
-        val serverDirectory = currentDirectory.resolve("server").toFile()
-
-        ProcessBuilder()
-            .directory(serverDirectory)
-            .command(
-                "java",
-                "@user_jvm_args.txt",
-                "@libraries/net/minecraftforge/forge/$forgeVersion/${
-                    if (currentOs.contains("win")) {
-                        "win"
-                    } else {
-                        "unix"
-                    }
-                }_args.txt ${if (GUI) "" else "--nogui"}"
-            )
-            .start()
     }
 }
