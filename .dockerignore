@@ -28,4 +28,4 @@
 !gradle-wrapper.properties
 
 # Avoid server directory
-**/server/
+/server

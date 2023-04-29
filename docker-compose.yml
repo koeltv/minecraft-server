@@ -10,4 +10,4 @@ services:
       - "80:80"
       - "25565:25565"
     volumes:
-      - ./server:/server
+      - ./server:/minecraft-server/server

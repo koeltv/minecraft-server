@@ -1,9 +1,10 @@
 #FROM eclipse-temurin:17-alpine AS builder
 #COPY . .
 #RUN chmod 755 ./gradlew
-#RUN ./gradlew buildFatJar
+#RUN ./gradlew runtime
 
-FROM eclipse-temurin:17-jre-alpine
-#COPY --from=builder ./build/libs/*.jar app.jar
-COPY ./build/libs/*.jar app.jar
-CMD ["java", "-jar", "app.jar"]
+FROM alpine
+#COPY --from=builder ./build/minecraft-server-0.0.1/minecraft-server-alpine-linux /minecraft-server
+COPY ./build/image/minecraft-server-alpine-linux /minecraft-server
+WORKDIR /minecraft-server
+CMD ["./minecraft-server"]
