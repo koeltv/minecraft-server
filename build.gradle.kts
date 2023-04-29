@@ -5,6 +5,7 @@ val logbackVersion: String by project
 plugins {
     kotlin("jvm") version "1.8.20"
     id("io.ktor.plugin") version "2.3.0"
+    id("org.beryx.runtime") version "1.13.0"
 }
 
 group = "com.koeltv"
@@ -36,4 +37,13 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
     testImplementation("io.ktor:ktor-server-test-host-jvm:2.3.0")
+}
+
+// TODO Rename image folder
+// TODO Rename Move scripts from ./bin to .
+
+runtime {
+    options.set(listOf("--strip-debug", "--compress", "1", "--no-header-files", "--no-man-pages"))
+    modules.set(listOf("java.naming", "jdk.unsupported", "jdk.unsupported.desktop"))
+    imageZip.set(project.file("${project.buildDir}/dist/${rootProject.name}-${version}.zip"))
 }

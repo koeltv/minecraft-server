@@ -20,6 +20,7 @@ fun Route.configureSSERoutes() {
             try {
                 call.respondSSE(
                     eventFlow.onStart {
+                        emit(ServerSendEvent("Starting point", "open"))
                         logFile.useLines { lines ->
                             lines.forEach {
                                 emit(ServerSendEvent(it))

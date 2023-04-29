@@ -6,18 +6,17 @@ import io.ktor.server.response.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 /**
  * The data class representing an SSE Event that will be sent to the client.
  */
-data class ServerSendEvent(val data: String, val event: String? = null, val id: String? = null) {
+data class ServerSendEvent(val data: String, val event: String = "message", val id: String? = null) {
     fun asString(): String {
         val buffer = StringBuffer()
 
         id?.let { buffer.appendLine("id: $id") }
-        event?.let { buffer.appendLine("event: $event") }
+        buffer.appendLine("event: $event")
         data.lines().forEach { buffer.appendLine("data: $it") }
         buffer.appendLine()
 
@@ -47,6 +46,4 @@ suspend fun ApplicationCall.respondSSE(events: Flow<ServerSendEvent>) {
  * We produce a [Flow] from a suspending function
  * that send a [ServerSendEvent] instance each second.
  */
-val eventFlow: MutableSharedFlow<ServerSendEvent> = MutableSharedFlow<ServerSendEvent>().also {
-    it.onEach { event -> println("Hey !") }
-}
+val eventFlow: MutableSharedFlow<ServerSendEvent> = MutableSharedFlow()
