@@ -1,3 +1,5 @@
+@file:Suppress("INACCESSIBLE_TYPE")
+
 val ktorVersion: String by project
 val kotlinVersion: String by project
 val logbackVersion: String by project
@@ -9,7 +11,7 @@ plugins {
 }
 
 group = "com.koeltv"
-version = "0.0.1"
+version = "0.4.0"
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
