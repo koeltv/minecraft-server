@@ -29,7 +29,7 @@ fun Route.configureMinecraftRoutes() {
         post("start") {
             if (minecraftServer.isOff()) {
                 application.log.info("Starting...")
-                minecraftServer.start { stream ->
+                val isOn = minecraftServer.start { stream ->
                     launch(Dispatchers.IO) {
                         stream.bufferedReader().use {
                             it.lineSequence()
@@ -40,16 +40,14 @@ fun Route.configureMinecraftRoutes() {
                         }
                     }
                 }
-                application.log.info("Server ready !")
+                application.log.info(if (isOn) "Server ready !" else "Couldn't start server")
             }
             call.respondRedirect("/minecraft")
         }
 
         post("stop") {
-            launch(Dispatchers.IO) {
-                minecraftServer.stop()
-                application.log.info("Server stopped")
-            }
+            minecraftServer.stop()
+            application.log.info("Server stopped")
             call.respondRedirect("/minecraft")
         }
 

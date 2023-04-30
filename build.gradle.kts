@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.koeltv"
-version = "0.4.4"
+version = "0.4.5"
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
@@ -98,23 +98,20 @@ runtime {
 
     val downloadPage = "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7%2B7"
 
-    if (!project.hasProperty("alpineOnly")) {
-        targetPlatform("win") {
-            setJdkHome(jdkDownload("${downloadPage}/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip"))
-        }
+    val targets = mapOf(
+        "win" to "${downloadPage}/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip",
+        "linux" to "${downloadPage}/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz",
+        "mac" to "${downloadPage}/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz",
+        "alpine-linux" to "${downloadPage}/OpenJDK17U-jdk_x64_alpine-linux_hotspot_17.0.7_7.tar.gz"
+    )
 
-        targetPlatform("linux") {
-            setJdkHome(jdkDownload("${downloadPage}/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz"))
+    targets
+        .filterKeys { target -> targets.keys.all { !project.hasProperty(it) } || project.hasProperty(target) }
+        .forEach { (platform, downloadLink) ->
+            targetPlatform(platform) {
+                setJdkHome(jdkDownload(downloadLink))
+            }
         }
-
-        targetPlatform("mac") {
-            setJdkHome(jdkDownload("${downloadPage}/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz"))
-        }
-    }
-
-    targetPlatform("alpine-linux") {
-        setJdkHome(jdkDownload("${downloadPage}/OpenJDK17U-jdk_x64_alpine-linux_hotspot_17.0.7_7.tar.gz"))
-    }
 }
 
 tasks.register("version") {
