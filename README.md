@@ -44,8 +44,32 @@ From here, start your minecraft server and pass it commands if you want.
 
 ## Deployment
 
-This project also has a `Dockerfile` and `docker-compose.yml` if you want to containerize it.
-An image will be made available to make it easier to set up. (IN-PROGRESS)
+You can use the [associated docker image](https://github.com/koeltv/minecraft-server/pkgs/container/minecraft-server)
+like so:
+
+```shell
+docker pull ghcr.io/koeltv/minecraft-server:latest
+```
+
+To use it, you will need to transfer the minecraft server files to it or attach a volume. The latter can be done using
+a `docker-compose.yml` file:
+
+```yaml
+version: '3.9'
+
+services:
+  minecraft-server:
+    image: ghcr.io/koeltv/minecraft-server:latest
+    container_name: minecraft-server
+    environment:
+      - USER=admin
+      - ROOT_PASSWORD=admin
+    ports:
+      - "80:80"
+      - "25565:25565"
+    volumes:
+      - <YOUR_MINECRAFT_SERVER_PATH>:/minecraft-server/server
+```
 
 ## Currently implemented
 

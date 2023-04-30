@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.koeltv"
-version = "0.4.2"
+version = "0.4.3"
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
@@ -42,13 +42,20 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host-jvm:$ktorVersion")
 }
 
-fun relocateScript(sourceFile: File, destinationFile: File, replace: Pair<String, String>) {
+fun relocateScript(sourceFile: File, destinationFile: File, vararg replacePairs: Pair<String, String>) {
+    val lineSeparator = if ("bat" in destinationFile.extension) "\r\n" else "\n"
+
     sourceFile.let { source ->
         destinationFile.createNewFile()
         source.useLines { lines ->
-            lines.forEach {
+            lines.forEach { line ->
                 destinationFile.appendText(
-                    "${it.replace(replace.first, replace.second)}${System.lineSeparator()}"
+                    replacePairs.fold(line) { resultingLine, replace ->
+                        resultingLine.replace(
+                            replace.first,
+                            replace.second
+                        )
+                    } + lineSeparator
                 )
             }
         }
