@@ -45,7 +45,7 @@ From here, start your minecraft server and pass it commands if you want.
 ## Deployment
 
 This project also has a `Dockerfile` and `docker-compose.yml` if you want to containerize it.
-An image will be made available to make it easier to set up.
+An image will be made available to make it easier to set up. (IN-PROGRESS)
 
 ## Currently implemented
 
