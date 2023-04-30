@@ -1,6 +1,5 @@
 package com.koeltv.model
 
-import com.koeltv.currentOs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -16,6 +15,18 @@ private const val GUI = true
 
 class MinecraftServer {
     private var process: Process? = null
+
+    companion object {
+        val osPrefix by lazy {
+            System.getProperty("os.name").lowercase().let {
+                if (it.contains("win")) {
+                    "win"
+                } else {
+                    "unix"
+                }
+            }
+        }
+    }
 
     init {
         Runtime.getRuntime().addShutdownHook(thread(start = false) {
@@ -56,13 +67,8 @@ class MinecraftServer {
             .command(
                 "java",
                 "@user_jvm_args.txt",
-                "@libraries/net/minecraftforge/forge/$forgeVersion/${
-                    if (currentOs.contains("win")) {
-                        "win"
-                    } else {
-                        "unix"
-                    }
-                }_args.txt ${if (GUI) "" else "--nogui"}"
+                "@libraries/net/minecraftforge/forge/$forgeVersion/${osPrefix}_args.txt",
+                if (GUI) "" else "--nogui"
             )
             .start()
             .also { logProcessor(it.inputStream) }
