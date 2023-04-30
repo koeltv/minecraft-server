@@ -56,7 +56,7 @@ fun relocateScript(sourceFile: File, destinationFile: File, replace: Pair<String
     }
 }
 
-tasks.create("restructureDist") {
+tasks.register("restructureDist") {
     dependsOn(tasks.installShadowDist)
 
     doLast {
@@ -102,4 +102,8 @@ runtime {
     targetPlatform("mac") {
         setJdkHome(jdkDownload("${downloadPage}/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz"))
     }
+}
+
+tasks.register("version") {
+    doLast { println("v$version") }
 }
