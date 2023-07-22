@@ -5,7 +5,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.sessions.*
 import io.ktor.util.*
 
-private val adminName: String = System.getenv("USER") ?: "admin"
+private val adminName: String = System.getenv("USERNAME") ?: "admin"
 private val password: String = System.getenv("ROOT_PASSWORD") ?: "admin"
 
 private val secretEncryptKey = hex(System.getenv("SECRET_ENCRYPT_KEY") ?: "00112233445566778899aabbccddeeff")

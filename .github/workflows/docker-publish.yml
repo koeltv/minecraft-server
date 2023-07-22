@@ -2,7 +2,7 @@ name: Docker Publish
 
 on:
   workflow_dispatch:
-  create:
+  push:
     tags:
       - 'v*'
 
@@ -26,8 +26,6 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-          - linux/arm/v6
-          - linux/arm/v7
           - linux/arm64
 
     steps:
@@ -73,7 +71,7 @@ jobs:
         uses: ./.github/actions/prepare
 
       - name: Create JLink distribution
-        run: ./gradlew runtime -Palpine-linux
+        run: ./gradlew runtime -Plinux
 
       # Build and push Docker image with BuildX
       # https://github.com/docker/build-push-action
@@ -88,7 +86,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          outputs: type=image,push-by-digest=true,push=true
 
       # Sign the resulting Docker image digest.
       # This will only write to the public Rekor transparency log when the Docker
