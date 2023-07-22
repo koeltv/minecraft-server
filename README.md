@@ -62,7 +62,7 @@ services:
     image: ghcr.io/koeltv/minecraft-server:latest
     container_name: minecraft-server
     environment:
-      - USER=admin
+      - USERNAME=admin
       - ROOT_PASSWORD=admin
     ports:
       - "80:80"

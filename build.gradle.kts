@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.koeltv"
-version = "0.4.10"
+version = "0.4.11"
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
