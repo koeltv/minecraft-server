@@ -2,9 +2,8 @@ name: Docker Publish
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [ published ]
 
 env:
   REGISTRY: ghcr.io
@@ -117,6 +116,9 @@ jobs:
 
   merge:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs:
       - build
     steps:
