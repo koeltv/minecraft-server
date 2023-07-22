@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.koeltv"
-version = "0.4.16"
+version = "0.4.17"
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
@@ -101,6 +101,7 @@ runtime {
     val targets = mapOf(
         "win" to "${downloadPage}/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip",
         "linux" to "${downloadPage}/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz",
+        "linux-arm" to "${downloadPage}/OpenJDK17U-jdk_arm_linux_hotspot_17.0.7_7.tar.gz",
         "mac" to "${downloadPage}/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz",
         "alpine-linux" to "${downloadPage}/OpenJDK17U-jdk_x64_alpine-linux_hotspot_17.0.7_7.tar.gz"
     )
