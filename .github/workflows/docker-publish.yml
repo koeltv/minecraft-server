@@ -2,10 +2,10 @@ name: Docker Publish
 
 on:
   workflow_dispatch:
-  workflow_run:
-    workflows: [ "Java CI with Gradle" ]
-    types:
-      - completed
+  release:
+  push:
+    tags:
+      - 'v*'
 
 env:
   REGISTRY: ghcr.io
@@ -13,8 +13,6 @@ env:
 
 jobs:
   build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -120,8 +118,6 @@ jobs:
           retention-days: 1
 
   merge:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
