@@ -101,7 +101,7 @@ class MinecraftServer {
         return serverDirectory.resolve("eula.txt")
             .toFile()
             .useLines {
-                it.any { line -> line.contains("eula=true") }
+                it.any { line -> line.lowercase().contains("eula=true") }
             }
     }
 
